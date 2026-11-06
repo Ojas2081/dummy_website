@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ffb3d1">
+<title>One Tiny Question 💋</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    min-height:100vh;min-height:100dvh;
+    font-family:'Fredoka','Trebuchet MS',system-ui,sans-serif;
+    background:linear-gradient(160deg,#ffd9e8 0%,#ffb3d1 50%,#ffe0ec 100%);
+    background-size:200% 200%;
+    animation:bgShift 10s ease-in-out infinite alternate;
+    display:flex;align-items:center;justify-content:center;
+    padding:max(16px,env(safe-area-inset-top)) 16px max(16px,env(safe-area-inset-bottom));
+    overflow-x:hidden;
+    user-select:none;-webkit-user-select:none;
+    touch-action:manipulation;
+  }
+  @keyframes bgShift{from{background-position:0% 0%}to{background-position:100% 100%}}
+
+  /* floating background hearts */
+  .bg{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+  .heart{
+    position:absolute;bottom:-60px;left:var(--x);
+    font-size:var(--size);opacity:0;
+    animation:floatUp var(--dur) linear forwards;
+  }
+  @keyframes floatUp{
+    0%{transform:translateY(0) translateX(0) rotate(-10deg);opacity:0}
+    10%{opacity:.7}
+    50%{transform:translateY(-55vh) translateX(18px) rotate(10deg)}
+    100%{transform:translateY(-115vh) translateX(-18px) rotate(-10deg);opacity:0}
+  }
+
+  /* cards */
+  .card{
+    position:relative;z-index:1;
+    width:min(92vw,420px);
+    padding:22px 18px 28px;
+    background:rgba(255,255,255,.78);
+    -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+    border-radius:32px;
+    box-shadow:0 20px 50px rgba(194,24,91,.22),0 0 0 4px rgba(255,255,255,.6) inset;
+    text-align:center;
+    animation:cardIn .8s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  @keyframes cardIn{from{opacity:0;transform:translateY(40px) scale(.85)}to{opacity:1;transform:none}}
+  .card.hide{display:none}
+
+  .panda{width:150px;height:150px;margin:0 auto;display:block;animation:bob 2.6s ease-in-out infinite;overflow:visible}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-8px) rotate(2deg)}}
+  .blink{transform-box:fill-box;transform-origin:center;animation:blink 4s infinite}
+  @keyframes blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
+  .tears{opacity:0;transition:opacity .4s}
+  .sad .tears{opacity:1}
+  .tear{transform-box:fill-box;transform-origin:center;animation:tear 1.2s ease-in infinite}
+  .tear.t2{animation-delay:.5s}
+  @keyframes tear{0%{transform:translateY(0);opacity:0}20%{opacity:1}100%{transform:translateY(26px);opacity:0}}
+
+  h1{
+    margin:10px 0 22px;
+    font-size:clamp(1.55rem,7vw,2.1rem);
+    line-height:1.2;color:#c2185b;font-weight:700;
+    min-height:2.5em;display:flex;align-items:center;justify-content:center;
+  }
+  h1.swap{animation:swap .5s ease}
+  .name{
+    display:inline-block;margin:8px auto 0;padding:5px 20px;
+    font-weight:700;font-size:1.25rem;letter-spacing:.5px;color:#fff;
+    background:linear-gradient(135deg,#ff6b9a,#ff2e63);
+    border-radius:999px;box-shadow:0 4px 0 #c91f4d;
+    animation:nameFloat 2.4s ease-in-out infinite;
+  }
+  @keyframes nameFloat{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-4px) rotate(2deg)}}
+  @keyframes swap{
+    0%{transform:scale(.7) rotate(-4deg);opacity:0}
+    60%{transform:scale(1.08) rotate(2deg);opacity:1}
+    100%{transform:scale(1) rotate(0)}
+  }
+
+  .buttons{
+    display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
+    gap:16px;
+  }
+  button{font-family:inherit;cursor:pointer;border:none;outline:none}
+  .yes{
+    --n:0;
+    font-size:min(calc(20px + var(--n) * 8px), 21vw);
+    padding:.55em 1.3em;
+    border-radius:999px;
+    color:#fff;font-weight:700;
+    background:linear-gradient(135deg,#ff6b9a,#ff2e63);
+    box-shadow:0 8px 0 #c91f4d,0 14px 24px rgba(255,46,99,.4);
+    transition:font-size .45s cubic-bezier(.34,1.56,.64,1),transform .1s,box-shadow .1s;
+    animation:pulse 1.4s ease-in-out infinite;
+  }
+  .yes:active{transform:translateY(6px);box-shadow:0 2px 0 #c91f4d,0 6px 12px rgba(255,46,99,.4)}
+  @keyframes pulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.12)}}
+
+  .no{
+    font-size:18px;padding:12px 26px;border-radius:999px;
+    color:#8a6b77;font-weight:600;background:#fff;
+    border:2px solid #ffc2d6;
+    box-shadow:0 5px 0 #ffd3e2;
+    z-index:20;white-space:nowrap;
+  }
+  .no:active{transform:translateY(3px);box-shadow:0 2px 0 #ffd3e2}
+  .no.floating{
+    position:fixed;
+    transition:left .4s cubic-bezier(.34,1.56,.64,1),top .4s cubic-bezier(.34,1.56,.64,1),transform .1s;
+    animation:wobble .5s ease;
+  }
+  @keyframes wobble{0%,100%{rotate:0deg}25%{rotate:-12deg}75%{rotate:12deg}}
+
+  /* result */
+  .result{
+    position:relative;z-index:2;
+    display:none;flex-direction:column;align-items:center;text-align:center;
+    width:min(92vw,420px);
+  }
+  .result.show{display:flex}
+  .sticker-wrap{position:relative;width:min(74vw,300px)}
+  .sticker{
+    width:100%;display:block;overflow:visible;
+    filter:drop-shadow(4px 0 0 #fff) drop-shadow(-4px 0 0 #fff) drop-shadow(0 4px 0 #fff) drop-shadow(0 -4px 0 #fff)
+           drop-shadow(0 12px 14px rgba(194,24,91,.35));
+    animation:stickerPop .9s cubic-bezier(.34,1.56,.64,1) both,stickerWobble 2.4s 1s ease-in-out infinite;
+  }
+  @keyframes stickerPop{0%{transform:scale(0) rotate(-25deg)}100%{transform:scale(1) rotate(0)}}
+  @keyframes stickerWobble{0%,100%{transform:rotate(-3deg) translateY(0)}50%{transform:rotate(3deg) translateY(-8px)}}
+  .fh{position:absolute;font-size:28px;opacity:0;animation:fh 2.4s ease-out infinite}
+  .fh:nth-child(2){left:62%;top:22%;animation-delay:.2s}
+  .fh:nth-child(3){left:26%;top:18%;animation-delay:.9s;font-size:22px}
+  .fh:nth-child(4){left:78%;top:40%;animation-delay:1.4s;font-size:24px}
+  .fh:nth-child(5){left:12%;top:42%;animation-delay:1.8s;font-size:20px}
+  @keyframes fh{
+    0%{transform:translateY(20px) scale(.4);opacity:0}
+    25%{opacity:1}
+    100%{transform:translateY(-70px) scale(1.2) rotate(15deg);opacity:0}
+  }
+  .result h2{
+    margin:18px 0 6px;font-size:clamp(2rem,10vw,2.8rem);color:#c2185b;
+    animation:textIn .7s .5s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  .result p{
+    margin:0 0 20px;font-size:1.15rem;color:#a0305f;font-weight:500;
+    animation:textIn .7s .8s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  @keyframes textIn{from{opacity:0;transform:translateY(20px) scale(.8)}to{opacity:1;transform:none}}
+  .replay{
+    font-size:16px;padding:10px 22px;border-radius:999px;background:rgba(255,255,255,.85);
+    color:#c2185b;font-weight:600;box-shadow:0 4px 0 #ffc2d6;
+    animation:textIn .7s 1.1s cubic-bezier(.34,1.56,.64,1) both;
+  }
+
+  /* confetti */
+  .confetti{
+    position:fixed;left:50%;top:55%;z-index:50;pointer-events:none;
+    font-size:var(--s);
+    animation:burst var(--d) cubic-bezier(.15,.7,.3,1) forwards;
+  }
+  @keyframes burst{
+    0%{transform:translate(-50%,-50%) scale(.2);opacity:1}
+    80%{opacity:1}
+    100%{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) rotate(var(--r)) scale(1);opacity:0}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  }
+</style>
+</head>
+<body>
+
+<div class="bg" id="bg" aria-hidden="true"></div>
+
+<!-- QUESTION SCREEN -->
+<main class="card" id="card">
+  <svg class="panda" id="pandaQ" viewBox="0 0 200 200" aria-hidden="true">
+    <circle cx="45" cy="45" r="25" fill="#2b2b2b"/>
+    <circle cx="155" cy="45" r="25" fill="#2b2b2b"/>
+    <circle cx="45" cy="45" r="11" fill="#ff9bb5" opacity=".7"/>
+    <circle cx="155" cy="45" r="11" fill="#ff9bb5" opacity=".7"/>
+    <ellipse cx="100" cy="110" rx="80" ry="72" fill="#fff" stroke="#f0d3de" stroke-width="3"/>
+    <ellipse cx="68" cy="102" rx="18" ry="24" fill="#2b2b2b" transform="rotate(-20 68 102)"/>
+    <ellipse cx="132" cy="102" rx="18" ry="24" fill="#2b2b2b" transform="rotate(20 132 102)"/>
+    <g class="blink">
+      <circle cx="70" cy="99" r="9" fill="#fff"/>
+      <circle cx="130" cy="99" r="9" fill="#fff"/>
+      <circle cx="71" cy="100" r="5.5" fill="#2b2b2b"/>
+      <circle cx="129" cy="100" r="5.5" fill="#2b2b2b"/>
+      <circle cx="73" cy="97.5" r="2" fill="#fff"/>
+      <circle cx="131" cy="97.5" r="2" fill="#fff"/>
+    </g>
+    <ellipse cx="100" cy="124" rx="9" ry="6" fill="#2b2b2b"/>
+    <path id="mouthQ" d="M91 136 Q100 146 109 136" stroke="#2b2b2b" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    <circle cx="46" cy="130" r="11" fill="#ff9bb5" opacity=".6"/>
+    <circle cx="154" cy="130" r="11" fill="#ff9bb5" opacity=".6"/>
+    <g class="tears">
+      <ellipse class="tear" cx="58" cy="124" rx="4" ry="6" fill="#7fd0ff"/>
+      <ellipse class="tear t2" cx="142" cy="124" rx="4" ry="6" fill="#7fd0ff"/>
+    </g>
+  </svg>
+
+  <div class="name">Ojas 💕</div>
+  <h1 id="question">Will you give me a kissy now? 💋</h1>
+
+  <div class="buttons" id="buttons">
+    <button class="yes" id="yes">Yes 💕</button>
+    <button class="no" id="no">No</button>
+  </div>
+</main>
+
+<!-- RESULT SCREEN -->
+<section class="result" id="result" aria-live="polite">
+  <div class="sticker-wrap">
+    <svg class="sticker" viewBox="0 0 200 235" aria-label="Ojas blowing a kiss">
+      <!-- body -->
+      <ellipse cx="100" cy="200" rx="62" ry="40" fill="#fff" stroke="#f0d3de" stroke-width="3"/>
+      <ellipse cx="44" cy="190" rx="16" ry="28" fill="#2b2b2b" transform="rotate(25 44 190)"/>
+      <ellipse cx="156" cy="190" rx="16" ry="28" fill="#2b2b2b" transform="rotate(-25 156 190)"/>
+      <!-- ears -->
+      <circle cx="45" cy="45" r="25" fill="#2b2b2b"/>
+      <circle cx="155" cy="45" r="25" fill="#2b2b2b"/>
+      <circle cx="45" cy="45" r="11" fill="#ff9bb5" opacity=".7"/>
+      <circle cx="155" cy="45" r="11" fill="#ff9bb5" opacity=".7"/>
+      <!-- head -->
+      <ellipse cx="100" cy="110" rx="80" ry="72" fill="#fff" stroke="#f0d3de" stroke-width="3"/>
+      <ellipse cx="68" cy="102" rx="18" ry="24" fill="#2b2b2b" transform="rotate(-20 68 102)"/>
+      <ellipse cx="132" cy="102" rx="18" ry="24" fill="#2b2b2b" transform="rotate(20 132 102)"/>
+      <!-- happy closed eyes -->
+      <path d="M59 102 Q69 91 79 102" stroke="#fff" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+      <path d="M121 102 Q131 91 141 102" stroke="#fff" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+      <!-- nose -->
+      <ellipse cx="100" cy="122" rx="9" ry="5.5" fill="#2b2b2b"/>
+      <!-- cheeks -->
+      <circle cx="46" cy="130" r="12" fill="#ff7fa3" opacity=".7"/>
+      <circle cx="154" cy="130" r="12" fill="#ff7fa3" opacity=".7"/>
+      <!-- kissy lips -->
+      <path d="M87 142 Q94 131 100 137 Q106 131 113 142 Q106 154 100 151 Q94 154 87 142Z" fill="#ff2e63"/>
+      <path d="M93 138 Q96 135 99 138" stroke="#ff9ab5" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <!-- tiny heart held in paws -->
+      <path d="M100 222 C84 210 86 196 96 196 C99 196 100 199 100 199 C100 199 101 196 104 196 C114 196 116 210 100 222Z" fill="#ff2e63"/>
+    </svg>
+    <span class="fh">💖</span><span class="fh">💋</span><span class="fh">💕</span><span class="fh">💗</span><span class="fh">💞</span>
+  </div>
+  <h2>Mwaaah! 💋</h2>
+  <div class="name">Ojas 💋</div>
+  <p>Kiss delivered! Come here, you 💕</p>
+  <button class="replay" id="replay">Again? 🔁</button>
+</section>
+
+<script>
+(function () {
+  var $ = function (s) { return document.querySelector(s); };
+  var yes = $('#yes'), no = $('#no'), q = $('#question'), card = $('#card'),
+      result = $('#result'), bg = $('#bg'), mouth = $('#mouthQ'), panda = $('#pandaQ');
+
+  var questions = [
+    "Will you give me a kissy now? 💋",
+    "Are you sure? 🥺",
+    "Are you really sure you want to go ahead with that? 😢",
+    "Think again... Ojas is asking nicely 🥺",
+    "Don't break Ojas's little heart 💔",
+    "Okay, last chance... 🥹",
+    "Ojas is crying now 😭",
+    "Psst... the big pink button looks lonely 👀",
+    "Ojas will buy you chocolates 🍫 please?",
+    "Your finger slipped, right? Try the big button 😏"
+  ];
+  // after the list above runs out, these keep cycling
+  var extras = [
+    "Plot twist: No is just a decoy 😜",
+    "You can't catch that No button anyway 🏃💨",
+    "Fine, Ojas will wait here... forever ⏳",
+    "Just one kiss. Tiny. Ojas-sized. 🥺👉👈",
+    "No is slippery, YES is right there 💖"
+  ];
+  var noLabels = ["No", "Sure 😒", "Really sure", "No...", "Nope", "Still no", "Nooo"];
+  var n = 0;
+  var MOVE_AFTER = 3; // "No" starts running away after this many clicks
+
+  /* ---------- background hearts ---------- */
+  var emojis = ['💗', '💕', '💖', '🩷', '💞', '🌸'];
+  function spawnHeart() {
+    if (document.hidden) return;
+    var h = document.createElement('span');
+    h.className = 'heart';
+    h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    h.style.setProperty('--x', Math.random() * 95 + 'vw');
+    h.style.setProperty('--size', (16 + Math.random() * 22) + 'px');
+    h.style.setProperty('--dur', (7 + Math.random() * 6) + 's');
+    bg.appendChild(h);
+    setTimeout(function () { h.remove(); }, 14000);
+  }
+  setInterval(spawnHeart, 700);
+  for (var i = 0; i < 6; i++) setTimeout(spawnHeart, i * 150);
+
+  /* ---------- panda mood ---------- */
+  function setMood() {
+    if (n >= 2) mouth.setAttribute('d', 'M91 144 Q100 134 109 144');
+    else mouth.setAttribute('d', 'M91 136 Q100 146 109 136');
+    panda.classList.toggle('sad', n >= 3);
+  }
+
+  /* ---------- "No" dodging ---------- */
+  function rectsOverlap(a, b) {
+    return !(a.r < b.l || a.l > b.r || a.b < b.t || a.t > b.b);
+  }
+  function yesZone() {
+    var r = yes.getBoundingClientRect();
+    // predict the final size after the grow animation
+    var cur = parseFloat(getComputedStyle(yes).fontSize) || 20;
+    var target = Math.min(20 + n * 8, window.innerWidth * 0.21);
+    var k = Math.max(1, target / cur);
+    var cx = (r.left + r.right) / 2, cy = (r.top + r.bottom) / 2;
+    var hw = (r.width * k) / 2 + 18, hh = (r.height * k) / 2 + 18;
+    return { l: cx - hw, r: cx + hw, t: cy - hh, b: cy + hh };
+  }
+  function moveNo() {
+    if (!no.classList.contains('floating')) {
+      var r0 = no.getBoundingClientRect();
+      no.style.left = r0.left + 'px';
+      no.style.top = r0.top + 'px';
+      no.classList.add('floating');
+      // Move the button out of the card: the card's blur effect would otherwise
+      // trap "position: fixed" inside it and push the button off-screen.
+      document.body.appendChild(no);
+      void no.offsetWidth; // reflow so the jump animates
+    }
+    var w = no.offsetWidth, h = no.offsetHeight, pad = 10;
+    var maxL = Math.max(pad, window.innerWidth - w - pad);
+    var maxT = Math.max(pad, window.innerHeight - h - pad);
+    var zone = yesZone(), pick = null;
+    for (var i = 0; i < 80; i++) {
+      var l = pad + Math.random() * (maxL - pad);
+      var t = pad + Math.random() * (maxT - pad);
+      var box = { l: l, r: l + w, t: t, b: t + h };
+      if (!rectsOverlap(box, zone)) { pick = { l: l, t: t }; break; }
+    }
+    if (!pick) pick = { l: pad, t: pad };
+    no.style.left = pick.l + 'px';
+    no.style.top = pick.t + 'px';
+    // restart wobble
+    no.style.animation = 'none'; void no.offsetWidth; no.style.animation = '';
+  }
+  // after Yes finishes growing, make sure No isn't sitting on top of it
+  yes.addEventListener('transitionend', function (e) {
+    if (e.propertyName !== 'font-size' || !no.classList.contains('floating')) return;
+    var a = no.getBoundingClientRect(), z = yes.getBoundingClientRect();
+    if (rectsOverlap({ l: a.left, r: a.right, t: a.top, b: a.bottom },
+                     { l: z.left, r: z.right, t: z.top, b: z.bottom })) moveNo();
+  });
+  window.addEventListener('resize', function () {
+    if (!no.classList.contains('floating')) return;
+    var l = Math.min(parseFloat(no.style.left) || 0, window.innerWidth - no.offsetWidth - 10);
+    var t = Math.min(parseFloat(no.style.top) || 0, window.innerHeight - no.offsetHeight - 10);
+    no.style.left = Math.max(10, l) + 'px';
+    no.style.top = Math.max(10, t) + 'px';
+  });
+
+  /* ---------- clicks ---------- */
+  no.addEventListener('click', function () {
+    n++;
+    yes.style.setProperty('--n', n);
+    q.textContent = n < questions.length
+      ? questions[n]
+      : extras[(n - questions.length) % extras.length];
+    q.classList.remove('swap'); void q.offsetWidth; q.classList.add('swap');
+    no.textContent = noLabels[Math.min(n, noLabels.length - 1)];
+    setMood();
+    if (navigator.vibrate) try { navigator.vibrate(30); } catch (e) {}
+    if (n >= MOVE_AFTER) moveNo();
+  });
+
+  function confetti() {
+    var items = ['💖', '💋', '💕', '🩷', '✨', '🌸', '💗', '😘'];
+    for (var i = 0; i < 46; i++) {
+      var c = document.createElement('span');
+      c.className = 'confetti';
+      c.textContent = items[Math.floor(Math.random() * items.length)];
+      var ang = Math.random() * Math.PI * 2, dist = 140 + Math.random() * 240;
+      c.style.setProperty('--dx', Math.cos(ang) * dist + 'px');
+      c.style.setProperty('--dy', (Math.sin(ang) * dist - 80) + 'px');
+      c.style.setProperty('--r', (Math.random() * 720 - 360) + 'deg');
+      c.style.setProperty('--s', (18 + Math.random() * 22) + 'px');
+      c.style.setProperty('--d', (1.4 + Math.random() * 1.2) + 's');
+      document.body.appendChild(c);
+      setTimeout(function (el) { el.remove(); }.bind(null, c), 3000);
+    }
+  }
+
+  yes.addEventListener('click', function () {
+    card.classList.add('hide');
+    no.classList.remove('floating');
+    no.style.display = 'none';
+    result.classList.add('show');
+    confetti();
+    setTimeout(confetti, 600);
+    if (navigator.vibrate) try { navigator.vibrate([60, 40, 60]); } catch (e) {}
+  });
+
+  $('#replay').addEventListener('click', function () {
+    n = 0;
+    yes.style.setProperty('--n', 0);
+    q.textContent = questions[0];
+    no.textContent = noLabels[0];
+    no.style.cssText = '';
+    no.classList.remove('floating');
+    $('#buttons').appendChild(no);
+    setMood();
+    result.classList.remove('show');
+    card.classList.remove('hide');
+    // re-run the entrance animation
+    card.style.animation = 'none'; void card.offsetWidth; card.style.animation = '';
+  });
+})();
+</script>
+</body>
+</html>
